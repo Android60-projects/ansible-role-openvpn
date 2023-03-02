@@ -1,0 +1,34 @@
+---
+- name: Converge
+  hosts: all
+
+  tasks:
+    - name: Update apt cache (on Debian).
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+      when: ansible_os_family == 'Debian'
+
+    - name: Install openssh-server (on RedHat).
+      package:
+        name: openssh-server
+        state: present
+      when: ansible_os_family == 'RedHat'
+
+    - name: Install selinux-policy (on RedHat).
+      package:
+        name: selinux-policy
+        state: present
+      when: ansible_os_family == 'RedHat'
+
+    - name: Install openssh-server (on Debian).
+      apt:
+        name: openssh-server
+        state: present
+      when: ansible_os_family == 'Debian'
+
+    - name: Generate SSH keys
+      tags: molecule-idempotence-notest
+      command: ssh-keygen -A
+
+- import_playbook: ../../main.yml

@@ -1,0 +1,58 @@
+---
+- sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: true
+
+- name: Enable OpenVPN Port (firewalld)
+  ansible.posix.firewalld:
+    port: "{{ openvpn_port }}/{{ openvpn_proto }}"
+    zone: "{{ firewalld_default_interface_zone }}"
+    permanent: true
+    immediate: true
+    state: enabled
+
+- name: Set tun0 interface to internal
+  ansible.posix.firewalld:
+    interface: tun0
+    zone: internal
+    permanent: true
+    immediate: true
+    state: enabled
+
+- name: Set default interface to external
+  ansible.posix.firewalld:
+    interface: "{{ ansible_default_ipv4.interface }}"
+    zone: "{{ firewalld_default_interface_zone }}"
+    permanent: true
+    immediate: true
+    state: enabled
+
+- name: Add internal zone to trusted
+  ansible.posix.firewalld:
+    zone: internal
+    state: present
+    permanent: true
+    target: ACCEPT
+
+- name: Disable AllowZoneDrifting in firewalld config
+  lineinfile:
+    dest: /etc/firewalld/firewalld.conf
+    regexp: '^AllowZoneDrifting'
+    line: 'AllowZoneDrifting=no'
+    state: present
+
+- name: Enable masquerading on external zone
+  ansible.posix.firewalld:
+    masquerade: true
+    zone: "{{ firewalld_default_interface_zone }}"
+    permanent: true
+    state: enabled
+    # Workaround ansible issue: https://github.com/ansible/ansible/pull/21693
+    # immediate: true
+  notify:
+    - restart firewalld
+
+- name: Restart firewalld
+  tags: molecule-idempotence-notest
+  command: firewall-cmd --reload
