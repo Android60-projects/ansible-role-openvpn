@@ -1,11 +1,7 @@
 pipeline {
-    agent molecule-test
+    agent any
     options {
         skipStagesAfterUnstable()
-    }
-
-    environment {
-
     }
 
     stages {
