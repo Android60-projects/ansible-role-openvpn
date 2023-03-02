@@ -12,7 +12,7 @@ pipeline {
                     sh "ls"
                 }
             }
-        }
+        
         post {
             success {
                 updateGitlabCommitStatus name: 'Test', state: 'success'
