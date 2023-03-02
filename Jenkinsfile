@@ -23,12 +23,13 @@ pipeline {
         } 
         }
     }
-post {
-    success {
-        updateGitlabCommitStatus name: 'Pipeline', state: 'success'
-    }
-    failure {
-        updateGitlabCommitStatus name: 'Pipeline', state: 'failed'
-    }
-} 
+    post {
+        success {
+            updateGitlabCommitStatus name: 'Pipeline', state: 'success'
+        }
+        failure {
+            updateGitlabCommitStatus name: 'Pipeline', state: 'failed'
+        }
+    } 
+}
 
