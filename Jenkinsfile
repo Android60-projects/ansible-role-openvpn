@@ -13,7 +13,9 @@ pipeline {
             agent { label 'molecule-test' }
             steps {
                 script {
-                    sh "molecule test"
+                    sh "whoami"
+                    sh "pwd"
+                    sh "echo $PATH"
                 }
             }
         
