@@ -19,7 +19,7 @@ pipeline {
                     sh "molecule test"
                 }
             }
-        
+
         post {
             success {
                 updateGitlabCommitStatus name: 'Test', state: 'success'
