@@ -46,6 +46,23 @@ pipeline {
             }
         } 
         }
+        stage('Test Ubuntu 22.04'){
+            agent { label 'molecule-test' }
+            steps {
+                script {
+                    sh "MOLECULE_DISTRO=ubuntu2204 molecule test"
+                }
+            }
+
+        post {
+            success {
+                updateGitlabCommitStatus name: 'Test Ubuntu 22.04', state: 'success'
+            }
+            failure {
+                updateGitlabCommitStatus name: 'Test Ubuntu 22.04', state: 'failed'
+            }
+        } 
+        }
     }
     post {
         success {
