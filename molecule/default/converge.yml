@@ -38,6 +38,7 @@
 
     - name: Create /var/log/auth.log
       when: ansible_os_family == 'Debian'
+      tags: molecule-idempotence-notest
       ansible.builtin.file:
         path: /var/log/auth.log
         state: touch
