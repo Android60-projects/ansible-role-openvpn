@@ -12,20 +12,37 @@ pipeline {
     }
 
     stages {
-        stage('Test'){
+        stage('Test CentOS 8'){
             agent { label 'molecule-test' }
             steps {
                 script {
-                    sh "molecule test"
+                    sh "MOLECULE_DISTRO=centos8 molecule test"
                 }
             }
 
         post {
             success {
-                updateGitlabCommitStatus name: 'Test', state: 'success'
+                updateGitlabCommitStatus name: 'Test CentOS 8', state: 'success'
             }
             failure {
-                updateGitlabCommitStatus name: 'Test', state: 'failed'
+                updateGitlabCommitStatus name: 'Test CentOS 8', state: 'failed'
+            }
+        } 
+        }
+        stage('Test Debian 10'){
+            agent { label 'molecule-test' }
+            steps {
+                script {
+                    sh "MOLECULE_DISTRO=debian10 molecule test"
+                }
+            }
+
+        post {
+            success {
+                updateGitlabCommitStatus name: 'Test Debian 10', state: 'success'
+            }
+            failure {
+                updateGitlabCommitStatus name: 'Test Debian 10', state: 'failed'
             }
         } 
         }
