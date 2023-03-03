@@ -18,7 +18,7 @@ pipeline {
                     agent { label 'molecule-test' }
                     steps {
                         script {
-                            sh "MOLECULE_DISTRO=centos8 molecule test"
+                            sh "MOLECULE_DISTRO=centos8 molecule test --parallel"
                         }
                     }
 
@@ -35,7 +35,7 @@ pipeline {
                     agent { label 'molecule-test' }
                     steps {
                         script {
-                            sh "MOLECULE_DISTRO=rockylinux8 molecule test"
+                            sh "MOLECULE_DISTRO=rockylinux8 molecule test --parallel"
                         }
                     }
 
@@ -57,7 +57,7 @@ pipeline {
                     agent { label 'molecule-test' }
                     steps {
                         script {
-                            sh "MOLECULE_DISTRO=debian10 molecule test"
+                            sh "MOLECULE_DISTRO=debian10 molecule test --parallel"
                         }
                     }
 
@@ -74,7 +74,7 @@ pipeline {
                     agent { label 'molecule-test' }
                     steps {
                         script {
-                            sh "MOLECULE_DISTRO=ubuntu2204 molecule test"
+                            sh "MOLECULE_DISTRO=ubuntu2204 molecule test --parallel"
                         }
                     }
 
