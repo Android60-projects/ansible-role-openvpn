@@ -27,6 +27,10 @@
         state: present
       when: ansible_os_family == 'Debian'
 
+    - name: Create /var/run/sshd
+      command: mkdir /var/run/sshd
+      when: ansible_os_family == 'Debian'
+
     - name: Generate SSH keys
       tags: molecule-idempotence-notest
       command: ssh-keygen -A
