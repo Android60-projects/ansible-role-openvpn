@@ -13,7 +13,7 @@ pipeline {
             agent { label 'molecule-test' }
             steps {
                 script {
-                    sh "ls"
+                    sh "molecule test"
                 }
             }
         
