@@ -21,15 +21,26 @@
         state: present
       when: ansible_os_family == 'RedHat'
 
-    - name: Install openssh-server (on Debian).
+    - name: Install required packages (on Debian).
       apt:
-        name: openssh-server
+        name:
+          - openssh-server
+          - rsyslog
+          - ufw
         state: present
       when: ansible_os_family == 'Debian'
 
     - name: Create /var/run/sshd
-      command: mkdir /var/run/sshd
       when: ansible_os_family == 'Debian'
+      ansible.builtin.file:
+        path: /var/run/sshd
+        state: directory
+
+    - name: Create /var/log/auth.log
+      when: ansible_os_family == 'Debian'
+      ansible.builtin.file:
+        path: /var/log/auth.log
+        state: touch
 
     - name: Generate SSH keys
       tags: molecule-idempotence-notest
