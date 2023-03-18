@@ -58,9 +58,11 @@
     - 20auto-upgrades
     - 50unattended-upgrades
 
-- name: Install fail2ban (Debian).
+- name: Install fail2ban and ufw (Debian).
   apt:
-    name: fail2ban
+    name:
+      - fail2ban
+      - ufw
     state: present
 
 - name: Install jq (Debian).
