@@ -28,13 +28,6 @@
     immediate: true
     state: enabled
 
-- name: Add internal zone to trusted
-  ansible.posix.firewalld:
-    zone: internal
-    state: present
-    permanent: true
-    target: ACCEPT
-
 - name: Disable AllowZoneDrifting in firewalld config
   lineinfile:
     dest: /etc/firewalld/firewalld.conf
