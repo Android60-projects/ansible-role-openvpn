@@ -12,6 +12,7 @@
   notify: restart ssh
 
 - name: Upgrade all packages
+  tags: notest
   dnf:
     name: '*'
     state: latest
