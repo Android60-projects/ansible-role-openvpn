@@ -12,10 +12,10 @@
   notify: restart ssh
 
 - name: Update and upgrade apt packages
+  tags: notest
   apt:
     upgrade: true
     update_cache: true
-    cache_valid_time: 86400
 
 # User account configuration.
 - name: Add a deployment user.
