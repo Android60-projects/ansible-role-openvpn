@@ -1,11 +1,32 @@
 ---
+- name: Update apt cache (Debian)
+  when: ansible_os_family == 'Debian'
+  apt:
+    update_cache: true
+
 - name: Install OpenVPN and Nginx
   package:
     name:
       - openvpn
+      - tar
       - nginx
       - python3-passlib
+      - jq
     state: present
+
+# ovpn-admin user account configuration.
+- name: Add a deployment user.
+  user:
+    name: ovpn-admin
+    state: present
+
+- name: Add sudo rights for deployment user.
+  lineinfile:
+    dest: /etc/sudoers
+    regexp: '^ovpn-admin'
+    line: 'ovpn-admin ALL=(ALL) NOPASSWD: ALL'
+    state: present
+    validate: 'visudo -cf %s'
 
 - name: Ensure /etc/openvpn/easy-rsa exists
   ansible.builtin.file:

@@ -4,6 +4,27 @@
     value: '1'
     sysctl_set: true
 
+- name: Allow OpenVPN to listen on port 8989/tcp.
+  tags: notest
+  seport:
+    ports: 8989
+    proto: tcp
+    setype: openvpn_port_t
+    state: present
+
+- name: Configure open ports with firewalld.
+  firewalld:
+    state: "{{ item.state }}"
+    port: "{{ item.port }}"
+    zone: "{{ firewalld_default_interface_zone }}"
+    immediate: true
+    permanent: true
+  with_items:
+    - {state: 'enabled', port: '22/tcp'}
+    - {state: 'enabled', port: '80/tcp'}
+    - {state: 'enabled', port: '443/tcp'}
+    - {state: 'enabled', port: '1194/udp'}
+
 - name: Enable OpenVPN Port (firewalld)
   ansible.posix.firewalld:
     port: "{{ openvpn_port }}/{{ openvpn_proto }}"

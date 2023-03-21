@@ -11,26 +11,29 @@
       line: "PasswordAuthentication no"
   notify: restart ssh
 
-- name: Update and upgrade apt packages
+- name: Update and upgrade apt packages.
+  when: upgrade_packages == true
   tags: notest
   apt:
-    upgrade: true
     update_cache: true
+    upgrade: true
+    cache_valid_time: 86400
 
-# User account configuration.
-- name: Add a deployment user.
-  user:
-    name: ovpn-admin
+- name: Ensure UFW is insalled.
+  apt:
+    name: ufw
     state: present
 
-# Disable root login and use `sudo`.
-- name: Add sudo rights for deployment user.
-  lineinfile:
-    dest: /etc/sudoers
-    regexp: '^ovpn-admin'
-    line: 'ovpn-admin ALL=(ALL) NOPASSWD: ALL'
-    state: present
-    validate: 'visudo -cf %s'
+- name: Open SSH port
+  ufw:
+    rule: allow
+    direction: in
+    proto: "tcp"
+    port: "22"
+    comment: Created by Ansible
+    state: enabled
+    delete: false
+  notify: reload ufw
 
 # Remove unused software, open only required ports.
 - name: Remove unused packages.
@@ -44,7 +47,6 @@
 - name: Install unattended upgrades package.
   apt:
     name: unattended-upgrades
-    update_cache: true
     state: present
 
 - name: Copy unattended-upgrades configuration files in place.
@@ -58,16 +60,9 @@
     - 20auto-upgrades
     - 50unattended-upgrades
 
-- name: Install fail2ban and ufw (Debian).
+- name: Install fail2ban (Debian).
   apt:
-    name:
-      - fail2ban
-      - ufw
-    state: present
-
-- name: Install jq (Debian).
-  apt:
-    name: jq
+    name: fail2ban
     state: present
 
 - name: Ensure fail2ban is running and enabled on boot.
@@ -76,18 +71,25 @@
     state: started
     enabled: true
 
-- name: Open ports for OpenVPN
-  ufw:
-    rule: allow
-    direction: in
-    proto: "{{ item.proto }}"
-    port: "{{ item.port }}"
-    comment: Created by Ansible
-    state: enabled
-    delete: false
-  with_items:
-    - {port: '22', proto: 'tcp'}
-    - {port: '80', proto: 'tcp'}
-    - {port: '443', proto: 'tcp'}
-    - {port: '{{ openvpn_port }}', proto: '{{ openvpn_proto }}'}
-  notify: reload ufw
+- name: Ensure UFW is running and enabled on boot.
+  service:
+    name: ufw
+    state: started
+    enabled: true
+
+- name: Count sshd jails
+  ansible.builtin.shell: |
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+    fail2ban-client status | grep "sshd" | wc -l
+    exit 0
+  args:
+    executable: "/bin/bash"
+  register: sshd_jail_count
+  changed_when: false
+
+- name: There should be at least one sshd jail
+  ansible.builtin.assert:
+    that:
+      - "sshd_jail_count.stdout|int > 0"
