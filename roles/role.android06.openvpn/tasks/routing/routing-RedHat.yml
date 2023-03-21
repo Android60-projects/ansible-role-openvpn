@@ -5,7 +5,6 @@
     sysctl_set: true
 
 - name: Allow OpenVPN to listen on port 8989/tcp.
-  tags: notest
   seport:
     ports: 8989
     proto: tcp
