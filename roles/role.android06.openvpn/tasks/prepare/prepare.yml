@@ -203,6 +203,13 @@
   notify:
     - restart ovpn-admin
 
+- name: Ensure nginx can connect to the network.
+  seboolean:
+    name: httpd_can_network_connect
+    state: true
+    persistent: true
+  when: ansible_selinux.status == 'enabled'
+
 - name: Create global htpasswd file
   htpasswd:
     path: /etc/nginx/global_htpasswd
