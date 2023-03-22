@@ -1,6 +1,7 @@
 ---
 - name: Update apt cache (Debian)
   when: ansible_os_family == 'Debian'
+  tags: molecule-idempotence-notest
   apt:
     update_cache: true
 
