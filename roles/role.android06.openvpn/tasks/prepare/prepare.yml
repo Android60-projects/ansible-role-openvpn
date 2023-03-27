@@ -217,6 +217,13 @@
     name: "{{ nginx_global_auth_username }}"
     password: "{{ nginx_global_auth_password }}"
 
+- name: delete default nginx site
+  when: ansible_os_family == 'Debian'
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: restart nginx
+
 - name: Place nginx site config (Debian)
   when: ansible_os_family == 'Debian'
   ansible.builtin.template:
