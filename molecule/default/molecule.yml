@@ -13,19 +13,19 @@ driver:
   parallel: true
   provision: yes
 platforms:
-  - name: test-wg-ubuntu2004
+  - name: test-ovpn-ubuntu2004
     box: geerlingguy/ubuntu2004
     memory: 1024
     cpus: 1
-  - name: test-wg-ubuntu1804
+  - name: test-ovpn-ubuntu1804
     box: geerlingguy/ubuntu1804
     memory: 1024
     cpus: 1
-  - name: test-wg-debian11
+  - name: test-ovpn-debian11
     box: geerlingguy/debian11
     memory: 1024
     cpus: 1
-  - name: test-wg-rocky8
+  - name: test-ovpn-rocky8
     box: geerlingguy/rockylinux8
     memory: 1024
     cpus: 1
