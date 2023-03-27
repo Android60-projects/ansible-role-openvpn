@@ -213,7 +213,7 @@
 
 - name: Create global htpasswd file
   htpasswd:
-    path: /etc/nginx/global_htpasswd
+    path: /etc/nginx/ovpn_admin_htpasswd
     name: "{{ nginx_global_auth_username }}"
     password: "{{ nginx_global_auth_password }}"
 
@@ -221,14 +221,14 @@
   when: ansible_os_family == 'Debian'
   ansible.builtin.template:
     src: nginx-site.j2
-    dest: "/etc/nginx/sites-available/default"
+    dest: "/etc/nginx/sites-enabled/ovpn-admin.conf"
   notify:
     - restart nginx
 
 - name: Place nginx site config (RedHat)
   when: ansible_os_family == 'RedHat'
   ansible.builtin.template:
-    src: redhat-nginx-site.j2
-    dest: "/etc/nginx/nginx.conf"
+    src: nginx-site.j2
+    dest: "/etc/nginx/conf.d/ovpn-admin.conf"
   notify:
     - restart nginx
