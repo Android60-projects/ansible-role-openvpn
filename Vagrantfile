@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
 
   config.vm.provider "virtualbox" do |v|
-    v.name = "security"
+    v.name = "openvpn-ansible-vagrant"
     v.memory = 1024
     v.cpus = 1
   end
