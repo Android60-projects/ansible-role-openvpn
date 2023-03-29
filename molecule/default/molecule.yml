@@ -17,18 +17,26 @@ platforms:
     box: geerlingguy/ubuntu2004
     memory: 1024
     cpus: 1
+    instance_raw_config_args:
+      - "vm.boot_timeout = 600"
   - name: test-ovpn-ubuntu1804
     box: geerlingguy/ubuntu1804
     memory: 1024
     cpus: 1
+    instance_raw_config_args:
+      - "vm.boot_timeout = 600"
   - name: test-ovpn-debian11
     box: geerlingguy/debian11
     memory: 1024
     cpus: 1
+    instance_raw_config_args:
+      - "vm.boot_timeout = 600"
   - name: test-ovpn-rocky8
     box: geerlingguy/rockylinux8
     memory: 1024
     cpus: 1
+    instance_raw_config_args:
+      - "vm.boot_timeout = 600"
 provisioner:
   name: ansible
   connection_options:
