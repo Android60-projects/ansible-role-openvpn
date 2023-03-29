@@ -13,26 +13,8 @@ driver:
   parallel: true
   provision: yes
 platforms:
-  - name: test-ovpn-ubuntu2004
-    box: geerlingguy/ubuntu2004
-    memory: 1024
-    cpus: 1
-    instance_raw_config_args:
-      - "vm.boot_timeout = 600"
-  - name: test-ovpn-ubuntu1804
-    box: geerlingguy/ubuntu1804
-    memory: 1024
-    cpus: 1
-    instance_raw_config_args:
-      - "vm.boot_timeout = 600"
-  - name: test-ovpn-debian11
-    box: debian/bullseye64
-    memory: 1024
-    cpus: 1
-    instance_raw_config_args:
-      - "vm.boot_timeout = 600"
-  - name: test-ovpn-rocky8
-    box: geerlingguy/rockylinux8
+  - name: test-ovpn-vm
+    box: ${MOLECULE_DISTRO:-geerlingguy/ubuntu2004}
     memory: 1024
     cpus: 1
     instance_raw_config_args:
