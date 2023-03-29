@@ -17,8 +17,6 @@ platforms:
     box: ${MOLECULE_DISTRO:-geerlingguy/ubuntu2004}
     memory: 1024
     cpus: 1
-    instance_raw_config_args:
-      - "vm.boot_timeout = 600"
 provisioner:
   name: ansible
   connection_options:

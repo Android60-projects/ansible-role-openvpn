@@ -18,7 +18,7 @@ pipeline {
                     agent { label 'molecule-virtualbox' }
                     steps {
                         script {
-                            sh "MOLECULE_DISTRO=geerlingguy/ubuntu2004 molecule test --parallel"
+                            sh "MOLECULE_DISTRO=ubuntu/focal64 molecule test --parallel"
                         }
                     }
 
