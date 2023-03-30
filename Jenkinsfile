@@ -12,7 +12,7 @@ pipeline {
     }
 
     stages {
-        stage('Test RedHat-like') {
+        stage('Test I') {
             parallel {
                 stage('Test Ubuntu 20.04'){
                     agent { label 'molecule-virtualbox' }
@@ -21,7 +21,7 @@ pipeline {
                             retry(5) {
                                 // retry code block
                                 script {
-                                    sh "MOLECULE_DISTRO=bento/ubuntu-20.04 molecule test --parallel"
+                                    sh "MOLECULE_DISTRO=geerlingguy/ubuntu2004 molecule test --parallel"
                                 }
                             }
                         }
@@ -60,7 +60,7 @@ pipeline {
             }
         }
         
-        stage('Test Debian-like') {
+        stage('Test II') {
             parallel {
                 stage('Test Debian 11'){
                     agent { label 'molecule-virtualbox' }
@@ -69,7 +69,7 @@ pipeline {
                             retry(5) {
                                 // retry code block
                                 script {
-                                    sh "MOLECULE_DISTRO=debian/bullseye64 molecule test --parallel"
+                                    sh "MOLECULE_DISTRO=geerlingguy/debian11 molecule test --parallel"
                                 }
                             }
                         }
