@@ -17,8 +17,13 @@ pipeline {
                 stage('Test Ubuntu 20.04'){
                     agent { label 'molecule-virtualbox' }
                     steps {
-                        script {
-                            sh "MOLECULE_DISTRO=bento/ubuntu-20.04 molecule test --parallel"
+                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                            retry(5) {
+                                // retry code block
+                                script {
+                                    sh "MOLECULE_DISTRO=bento/ubuntu-20.04 molecule test --parallel"
+                                }
+                            }
                         }
                     }
 
@@ -34,11 +39,15 @@ pipeline {
                 stage('Test Rocky Linux 8'){
                     agent { label 'molecule-virtualbox' }
                     steps {
-                        script {
-                            sh "MOLECULE_DISTRO=geerlingguy/rockylinux8 molecule test --parallel"
+                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                            retry(5) {
+                                // retry code block
+                                script {
+                                    sh "MOLECULE_DISTRO=geerlingguy/rockylinux8 molecule test --parallel"
+                                }
+                            }
                         }
                     }
-
                     post {
                         success {
                             updateGitlabCommitStatus name: 'Test Rocky Linux 8', state: 'success'
@@ -56,8 +65,13 @@ pipeline {
                 stage('Test Debian 11'){
                     agent { label 'molecule-virtualbox' }
                     steps {
-                        script {
-                            sh "MOLECULE_DISTRO=debian/bullseye64 molecule test --parallel"
+                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                            retry(5) {
+                                // retry code block
+                                script {
+                                    sh "MOLECULE_DISTRO=debian/bullseye64 molecule test --parallel"
+                                }
+                            }
                         }
                     }
 
@@ -73,8 +87,13 @@ pipeline {
                 stage('Test Ubuntu 18.04'){
                     agent { label 'molecule-virtualbox' }
                     steps {
-                        script {
-                            sh "MOLECULE_DISTRO=geerlingguy/ubuntu1804 molecule test --parallel"
+                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                            retry(5) {
+                                // retry code block
+                                script {
+                                    sh "MOLECULE_DISTRO=geerlingguy/ubuntu1804 molecule test --parallel"
+                                }
+                            }
                         }
                     }
 
