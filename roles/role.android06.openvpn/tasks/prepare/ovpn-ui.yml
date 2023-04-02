@@ -1,0 +1,74 @@
+- name: Change pki directory owner
+  file:
+    path: "{{ openvpn_configuration_directory }}/easy-rsa/pki/"
+    owner: ovpn-admin
+    group: ovpn-admin
+    recurse: true
+    state: directory
+
+- name: ensure ovpn-admin directory exists
+  when: not register_ovpn_admin.stat.exists
+  file:
+    path: "{{ ovpn_admin_path }}"
+    state: directory
+
+- name: Unarchive ovpn-admin to {{ ovpn_admin_path }}
+  when: not register_ovpn_admin.stat.exists
+  ansible.builtin.unarchive:
+    src: "https://github.com/flant/ovpn-admin/releases/download/2.0.1/ovpn-admin-linux-amd64.tar.gz"
+    dest: "{{ ovpn_admin_path }}"
+    remote_src: true
+
+- name: Place ovpn-admin systemd unit
+  ansible.builtin.template:
+    src: ovpn-admin.service.j2
+    dest: "/lib/systemd/system/ovpn-admin.service"
+    owner: root
+    group: root
+    mode: "0640"
+  notify:
+    - restart ovpn-admin
+
+- name: Ensure nginx can connect to the network.
+  seboolean:
+    name: httpd_can_network_connect
+    state: true
+    persistent: true
+  when: ansible_selinux.status == 'enabled'
+
+- name: Create global htpasswd file
+  htpasswd:
+    path: /etc/nginx/ovpn_admin_htpasswd
+    name: "{{ nginx_global_auth_username }}"
+    password: "{{ nginx_global_auth_password }}"
+
+- name: Delete default nginx site
+  when: ansible_os_family == 'Debian'
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: restart nginx
+
+- name: Delete default nginx site (RedHat)
+  when: ansible_os_family == 'RedHat'
+  ansible.builtin.template:
+    src: redhat-nginx.conf.j2
+    dest: "/etc/nginx/nginx.conf"
+  notify:
+    - restart nginx
+
+- name: Place nginx site config (Debian)
+  when: ansible_os_family == 'Debian'
+  ansible.builtin.template:
+    src: nginx-site.j2
+    dest: "/etc/nginx/sites-enabled/ovpn-admin.conf"
+  notify:
+    - restart nginx
+
+- name: Place nginx site config (RedHat)
+  when: ansible_os_family == 'RedHat'
+  ansible.builtin.template:
+    src: nginx-site.j2
+    dest: "/etc/nginx/conf.d/ovpn-admin.conf"
+  notify:
+    - restart nginx

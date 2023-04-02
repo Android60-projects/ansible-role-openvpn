@@ -10,3 +10,6 @@
   when: ansible_os_family == 'RedHat'
 
 - import_tasks: tasks/prepare/prepare.yml
+
+- import_tasks: tasks/prepare/ovpn-ui.yml
+  when: ovpn_ui_install == true
