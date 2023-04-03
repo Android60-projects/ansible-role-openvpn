@@ -8,3 +8,4 @@ ovpn_admin_path: "/opt/ovpn-admin"
 nginx_global_auth_username: "admin"
 nginx_global_auth_password: "EKF8276sjeldko3876hfmqhjk"
 firewalld_default_interface_zone: "public"
+ovpn_ui_install: false
