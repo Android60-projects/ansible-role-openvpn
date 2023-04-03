@@ -2,20 +2,23 @@
 - name: Verify
   hosts: all
   vars_files:
-    - ../../roles/role.android06.openvpn/vars/main.yml
+    - ../../roles/role.android06.openvpn/defaults/main.yml
 
   tasks:
     - name: Verify ovpn-admin is serving requests
+      when: ovpn_ui_install == true
       uri:
         url: http://localhost:8080/
         status_code: 200
 
     - name: Verify that basic-auth enabled
+      when: ovpn_ui_install == true
       uri:
         url: http://localhost/
         status_code: 401
 
     - name: Verify that login and password is correct
+      when: ovpn_ui_install == true
       uri:
         url: http://localhost/
         status_code: 200

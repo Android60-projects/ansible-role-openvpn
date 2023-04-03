@@ -17,7 +17,7 @@ pipeline {
                 stage('Test Ubuntu 20.04'){
                     agent { label 'molecule-virtualbox' }
                     steps {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                             retry(5) {
                                 // retry code block
                                 script {
@@ -39,7 +39,7 @@ pipeline {
                 stage('Test Rocky Linux 8'){
                     agent { label 'molecule-virtualbox' }
                     steps {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                             retry(5) {
                                 // retry code block
                                 script {
@@ -65,7 +65,7 @@ pipeline {
                 stage('Test Debian 11'){
                     agent { label 'molecule-virtualbox' }
                     steps {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                             retry(5) {
                                 // retry code block
                                 script {
@@ -87,7 +87,7 @@ pipeline {
                 stage('Test Ubuntu 18.04'){
                     agent { label 'molecule-virtualbox' }
                     steps {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                             retry(5) {
                                 // retry code block
                                 script {
