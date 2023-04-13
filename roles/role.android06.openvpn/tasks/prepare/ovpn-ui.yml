@@ -52,7 +52,7 @@
     name: "{{ nginx_global_auth_username }}"
     password: "{{ nginx_global_auth_password }}"
   tags:
-    - ovpn-ui-config
+    - nginx-config
 
 - name: Delete default nginx site
   when: ansible_os_family == 'Debian'
@@ -61,7 +61,7 @@
     state: absent
   notify: restart nginx
   tags:
-    - ovpn-ui-config
+    - nginx-config
 
 - name: Delete default nginx site (RedHat)
   when: ansible_os_family == 'RedHat'
@@ -71,7 +71,7 @@
   notify:
     - restart nginx
   tags:
-    - ovpn-ui-config
+    - nginx-config
 
 - name: Place nginx site config (Debian)
   when: ansible_os_family == 'Debian'
@@ -81,7 +81,7 @@
   notify:
     - restart nginx
   tags:
-    - ovpn-ui-config
+    - nginx-config
 
 - name: Place nginx site config (RedHat)
   when: ansible_os_family == 'RedHat'
@@ -91,4 +91,4 @@
   notify:
     - restart nginx
   tags:
-    - ovpn-ui-config
+    - nginx-config

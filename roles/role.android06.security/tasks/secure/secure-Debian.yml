@@ -37,11 +37,12 @@
 
 # Remove unused software, open only required ports.
 - name: Remove unused packages.
-  package:
+  apt:
     name:
       - nano
       - sendmail
     state: absent
+    lock_timeout: "3600"
 
 # Automating updates for Debian systems.
 - name: Install unattended upgrades package.
