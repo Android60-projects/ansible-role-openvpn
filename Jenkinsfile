@@ -123,7 +123,7 @@ pipeline {
             updateGitlabCommitStatus name: 'Pipeline', state: 'failed'
             script {
                 withCredentials([string(credentialsId: "jenkinsChannelChatid", variable: "CHAT_ID")]) {
-                    telegramSend(message: "❌\nJob: ${env.JOB_NAME}\nBuild: ${env.BUILD_NUMBER}\nResult: FAILURE", chatId:CHAT_ID)
+                    telegramSend(message: "✅\nJob: ${env.JOB_NAME}\nBuild: ${env.BUILD_NUMBER}\nDuration: ${currentBuild.durationString}\nResult: SUCCESS", chatId:CHAT_ID)
                 }
             }
         }
