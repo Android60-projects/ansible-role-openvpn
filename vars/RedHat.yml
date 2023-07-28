@@ -1,0 +1,3 @@
+---
+openvpn_server_user: "nobody"
+openvpn_server_group: "nobody"

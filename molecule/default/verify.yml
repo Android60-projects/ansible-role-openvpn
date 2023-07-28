@@ -2,7 +2,7 @@
 - name: Verify
   hosts: all
   vars_files:
-    - ../../roles/role.android06.openvpn/defaults/main.yml
+    - ../../defaults/main.yml
 
   tasks:
     - name: Verify ovpn-admin is serving requests

@@ -1,0 +1,21 @@
+{{ ansible_managed | comment }}
+
+[Unit]
+Description=OVPN Admin Web UI
+Documentation=https://github.com/flant/ovpn-admin
+After=network.target
+
+[Service]
+Environment=OVPN_LISTEN_PORT=8080
+Environment=OVPN_MASTER_USER=admin
+Environment=OVPN_MASTER_PASSWORD=password
+Environment=OVPN_SERVER={{ public_ip }}:1194:udp
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/EasyRSA
+
+Type=simple
+User=ovpn-admin
+ExecStart={{ ovpn_admin_path }}/ovpn-admin --easyrsa.path="/etc/openvpn/easy-rsa" --easyrsa.index-path="/etc/openvpn/easy-rsa/pki/index.txt" --log.level debug
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

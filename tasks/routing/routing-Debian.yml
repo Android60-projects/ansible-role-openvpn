@@ -1,0 +1,49 @@
+---
+- sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: true
+
+- name: Open ports for OpenVPN
+  ufw:
+    rule: allow
+    direction: in
+    proto: "{{ item.proto }}"
+    port: "{{ item.port }}"
+    comment: Created by Ansible
+    state: enabled
+    delete: false
+  with_items:
+    - {port: '22', proto: 'tcp'}
+    - {port: '80', proto: 'tcp'}
+    - {port: '443', proto: 'tcp'}
+    - {port: '{{ openvpn_port }}', proto: '{{ openvpn_proto }}'}
+  notify: reload ufw
+
+- name: Accept packets from VPN tunnel adaptor - ufw
+  ufw:
+    comment: Created by Ansible
+    direction: in
+    interface: tun0
+    rule: allow
+
+- ufw:
+    rule: allow
+    route: true
+    comment: Created by Ansible
+    src: 10.8.0.0/24
+    dest: 0.0.0.0/0
+
+- name: Setup nat table rules with MASQUERADE - ufw
+  blockinfile:
+    dest: /etc/ufw/before.rules
+    state: present
+    insertbefore: \*filter
+    block: |
+      # OpenVPN config
+      *nat
+      :POSTROUTING ACCEPT [0:0]
+      -A POSTROUTING -s 10.8.0.0/24 -j MASQUERADE
+      COMMIT
+  notify:
+    - reload ufw

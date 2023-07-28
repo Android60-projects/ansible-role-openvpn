@@ -4,7 +4,7 @@ dependencies: []
 galaxy_info:
   role_name: openvpn
   author: android06
-  description: "This role installs L2TP IPSec server"
+  description: "This role installs OpenVPN server"
   company: "Android06"
   license: "license (BSD, MIT)"
   min_ansible_version: 2.10
