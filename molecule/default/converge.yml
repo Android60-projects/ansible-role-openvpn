@@ -12,4 +12,4 @@
 
   roles:
     - role: android06.security
-    - role: openvpn-ansible
+    - role: android06.openvpn
